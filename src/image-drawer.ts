@@ -1,44 +1,54 @@
 import { cover } from './resize-modes/cover'
 import { contain } from './resize-modes/contain'
+import { stretch } from './resize-modes/stretch'
+import { repeat } from './resize-modes/repeat'
+import { makeBorderRadius } from './border-radius'
+
+type BorderRadiusType = [number, number, number, number]
 
 interface OptionsInterface {
-  opacity?: number
   crop?: [number, number, number, number]
-  borderRadius?: number | [number, number, number, number]
-  resizeMode?: 'cover' | 'contain'// | 'stretch' | 'repeat' | 'center'
+  borderRadius?: number | BorderRadiusType
+  resizeMode?: 'cover' | 'contain'| 'stretch' | 'repeat'
   position?: [number, number]
 }
 
-const resizeModes = { cover, contain }
+const resizeModes = { cover, contain, stretch, repeat }
 
 export function imageDrawer (x: number, y: number, width: number, height: number) {
   const images: [HTMLImageElement, OptionsInterface][] = []
 
   function draw (ctx: CanvasRenderingContext2D, img: HTMLImageElement, options: OptionsInterface) {
     const {
-      opacity = 1,
       crop = [0, 0, img.naturalWidth, img.naturalHeight],
-      borderRadius = 0,
+      borderRadius = 200,
       resizeMode = 'cover',
-      position = [0, 0],
+      position = [0.5, 0.5],
     }: OptionsInterface = options
 
-    ctx.globalAlpha = opacity
+    const drawArea = { x, y, width, height }
+
+    // ctx.beginPath()
+    // ctx.rect(x, y, width, height)
+    // ctx.fillStyle = 'rgba(0, 0, 0, .1)'
+    // ctx.fill()
+    // ctx.clip()
+
+    const _borderRadius = (
+      Array.isArray(borderRadius)
+        ? borderRadius
+        : Array(4).fill(borderRadius)
+    ) as BorderRadiusType
+
+    makeBorderRadius(ctx, _borderRadius, drawArea)
 
     resizeModes[resizeMode]({
       img,
       ctx,
       crop,
       position,
-      drawArea: {
-        x,
-        y,
-        width,
-        height
-      },
+      drawArea,
     })
-
-    ctx.globalAlpha = 1
   }
 
   return {

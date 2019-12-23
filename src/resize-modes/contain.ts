@@ -11,13 +11,18 @@ export function contain (options: OptionsInterface) {
   const destWidth = cropWidth * scale
   const destHeight = cropHeight * scale
 
-  const destXOffset = drawArea.width / 2 - (cropWidth / 2) * scale
-  const destYOffset = drawArea.height / 2 - (cropHeight / 2) * scale
+  const destX = drawArea.x + drawArea.width * position[0] - (cropWidth * position[0]) * scale
+  const destY = drawArea.y + drawArea.height * position[1] - (cropHeight * position[1]) * scale
 
-  return {
-    destXOffset,
-    destYOffset,
+  ctx.drawImage(
+    img,
+    crop[0],
+    crop[1],
+    crop[2],
+    crop[3],
+    destX,
+    destY,
     destWidth,
-    destHeight,
-  }
+    destHeight
+  )
 }

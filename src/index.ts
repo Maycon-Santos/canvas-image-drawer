@@ -23,7 +23,8 @@ if (canvas) {
   const img = new Image()
   img.src = 'https://static.escolakids.uol.com.br/2019/07/paisagem-natural.jpg'
   img.onload = () => {
-    const drawArea = imageDrawer(30, 30, 800, 400)
+    img.width = 300
+    const drawArea = imageDrawer(30, 30, 400, 400)
     drawArea.add(img)
     drawArea.draw(ctx)
   }
