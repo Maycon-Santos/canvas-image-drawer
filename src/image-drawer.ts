@@ -21,18 +21,12 @@ export function imageDrawer (x: number, y: number, width: number, height: number
   function draw (ctx: CanvasRenderingContext2D, img: HTMLImageElement, options: OptionsInterface) {
     const {
       crop = [0, 0, img.naturalWidth, img.naturalHeight],
-      borderRadius = 200,
+      borderRadius = 0,
       resizeMode = 'cover',
       position = [0.5, 0.5],
     }: OptionsInterface = options
 
     const drawArea = { x, y, width, height }
-
-    // ctx.beginPath()
-    // ctx.rect(x, y, width, height)
-    // ctx.fillStyle = 'rgba(0, 0, 0, .1)'
-    // ctx.fill()
-    // ctx.clip()
 
     const _borderRadius = (
       Array.isArray(borderRadius)
