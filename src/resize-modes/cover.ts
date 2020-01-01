@@ -1,6 +1,6 @@
 import { OptionsInterface } from './_types'
 
-export function cover (options: OptionsInterface) {
+export function cover (options: OptionsInterface): void {
   const { ctx, img, drawArea, position, crop } = options
 
   const cropWidth = crop[2] - crop[0]

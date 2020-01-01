@@ -7,6 +7,9 @@ import { makeBorderRadius } from './border-radius'
 type BorderRadiusType = [number, number, number, number]
 
 interface OptionsInterface {
+  ctx: CanvasRenderingContext2D
+  img: HTMLImageElement
+  drawArea?: [number, number, number, number]
   crop?: [number, number, number, number]
   borderRadius?: number | BorderRadiusType
   resizeMode?: 'cover' | 'contain'| 'stretch' | 'repeat'
@@ -15,38 +18,39 @@ interface OptionsInterface {
 
 const resizeModes = { cover, contain, stretch, repeat }
 
-export function imageDrawer (x: number, y: number, width: number, height: number) {
-  const images: [HTMLImageElement, OptionsInterface][] = []
+export function imageDrawer (options: OptionsInterface): void {
+  const {
+    ctx,
+    img,
+    drawArea: rawDrawArea = [0, 0, ctx.canvas.width, ctx.canvas.height],
+    borderRadius: rawBorderRadius = 0,
+    crop = [0, 0, img.naturalWidth, img.naturalHeight],
+    resizeMode = 'cover',
+    position = [0.5, 0.5],
+  }: OptionsInterface = options
 
-  function draw (ctx: CanvasRenderingContext2D, img: HTMLImageElement, options: OptionsInterface) {
-    const {
-      crop = [0, 0, img.naturalWidth, img.naturalHeight],
-      borderRadius = 0,
-      resizeMode = 'cover',
-      position = [0.5, 0.5],
-    }: OptionsInterface = options
-
-    const drawArea = { x, y, width, height }
-
-    const _borderRadius = (
-      Array.isArray(borderRadius)
-        ? borderRadius
-        : Array(4).fill(borderRadius)
-    ) as BorderRadiusType
-
-    makeBorderRadius(ctx, _borderRadius, drawArea)
-
-    resizeModes[resizeMode]({
-      img,
-      ctx,
-      crop,
-      position,
-      drawArea,
-    })
+  const drawArea = {
+    x: rawDrawArea[0],
+    y: rawDrawArea[1],
+    width: rawDrawArea[2],
+    height: rawDrawArea[3],
   }
 
-  return {
-    add: (img: HTMLImageElement, options?: OptionsInterface) => images.push([img, options || {}]),
-    draw: (ctx: CanvasRenderingContext2D) => images.forEach(([img, options]) => draw(ctx, img, options)),
-  }
+  const borderRadius = (
+    Array.isArray(rawBorderRadius)
+      ? rawBorderRadius
+      : Array(4).fill(rawBorderRadius)
+  ) as BorderRadiusType
+
+  makeBorderRadius(ctx, borderRadius, drawArea)
+
+  const resizeFunc = resizeModes[resizeMode]
+
+  resizeFunc({
+    img,
+    ctx,
+    crop,
+    position,
+    drawArea,
+  })
 }

@@ -1,6 +1,6 @@
 import { OptionsInterface } from './_types'
 
-export function stretch (options: OptionsInterface) {
+export function stretch (options: OptionsInterface): void {
   const { ctx, img, drawArea, position, crop } = options
 
   const cropWidth = crop[2] - crop[0]

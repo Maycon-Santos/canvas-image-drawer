@@ -7,7 +7,7 @@ width: number
 
 type radiusType = [number, number, number, number]
 
-export function makeBorderRadius (ctx: CanvasRenderingContext2D, radius: radiusType, drawArea: DrawAreaInterface) {
+export function makeBorderRadius (ctx: CanvasRenderingContext2D, radius: radiusType, drawArea: DrawAreaInterface): void {
   ctx.beginPath()
   ctx.moveTo(drawArea.x + radius[0], drawArea.y)
   ctx.arcTo(drawArea.x + drawArea.width, drawArea.y, drawArea.x + drawArea.width, drawArea.y + drawArea.height, radius[0])
